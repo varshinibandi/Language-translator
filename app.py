@@ -5,6 +5,7 @@ from langchain.llms import Ollama
 from gtts import gTTS
 import tempfile
 import requests
+import speech_recognition as sr
 
 # Initialize the Ollama model with a specific model version (llama3.1:8b)
 try:
@@ -63,23 +64,47 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Set the title with animation
+# Initialize session states for text input and speech recognition
+if "speech_text" not in st.session_state:
+    st.session_state.speech_text = ""
+if "input_text" not in st.session_state:
+    st.session_state.input_text = ""
+
+# Title
 st.markdown("<h1 style='text-align: center; animation: fadeIn 2s;'>Language Translator 🗣️</h1>", unsafe_allow_html=True)
 
-# Input fields
+# Add speech-to-text functionality
+recognizer = sr.Recognizer()
 st.subheader("Enter the details below:")
-input_text = st.text_input("Type the Word or Sentence", "")
+if st.button("🎤 Speak Now"):
+    with st.spinner("Listening... Please speak clearly into the microphone."):
+        try:
+            with sr.Microphone() as source:
+                recognizer.adjust_for_ambient_noise(source)
+                audio = recognizer.listen(source)
+                st.session_state.speech_text = recognizer.recognize_google(audio)
+                st.success(f"You said: {st.session_state.speech_text}")
+        except sr.UnknownValueError:
+            st.error("Sorry, I could not understand the audio. Please try again.")
+        except sr.RequestError as e:
+            st.error(f"Could not request results from Google Speech Recognition service: {e}")
+
+# Use speech text if available; otherwise, allow manual input
+st.session_state.input_text = st.text_input("Type the Word or Sentence", st.session_state.speech_text)
 input_language = st.selectbox("Select Translation Language", indian_languages)
 
 # Define a button that will trigger the translation process
 if st.button("Translate"):
-    if not input_text.strip():
+    if not st.session_state.input_text.strip():
         st.error("Please enter a word or sentence to translate!")
     else:
         with st.spinner("Translating... please wait!"):
             try:
                 # Invoke the chain of prompt, model, and parser to generate the translated output
-                translated_output = chain.invoke({"language": input_language, "text": input_text})
+                translated_output = chain.invoke({
+                    "language": input_language,
+                    "text": st.session_state.input_text
+                })
                 # Display the translated output
                 st.markdown(
                     f"<div class='translated-text'><strong>Translated output:</strong> {translated_output}</div>",
@@ -105,7 +130,7 @@ if st.button("Translate"):
                     "Odia": "or"
                 }
 
-                tts = gTTS(text=translated_output, lang=language_map.get(input_language, "hi")) 
+                tts = gTTS(text=translated_output, lang=language_map.get(input_language, "hi"))
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_audio:
                     tts.save(temp_audio.name)
                     st.audio(temp_audio.name, format="audio/mp3")
