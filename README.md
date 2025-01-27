@@ -1,6 +1,6 @@
 # Language Translator 🗣️
 
-A powerful, user-friendly Language Translator built using **Streamlit**, **LangChain**, and **Google Text-to-Speech (gTTS)**. This application is designed specifically for Indian languages, enabling translations and audio playback in multiple regional languages.
+A powerful, user-friendly Language Translator built using **Streamlit**, **LangChain**, and **Google Text-to-Speech (gTTS)**,**speech Recognition(speech to text)**. This application is designed specifically for Indian languages, enabling translations and audio playback in multiple regional languages.
 
 ---
 
