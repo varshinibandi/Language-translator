@@ -11,7 +11,7 @@ This Language Translator takes a user-inputted sentence or word and translates i
 - **LangChain**: For managing and processing prompt chains with the `Ollama` language model.
 - **Ollama Model**: A language model used to generate the translations.
 - **gTTS**: Converts the translated text into audio for playback.
-
+- **speech_recognition**: Used to convert spoken words to text.
 The app is styled using custom CSS for a visually appealing UI and uses Streamlit for a simple yet dynamic interface.
 
 ---
@@ -24,7 +24,8 @@ The app is styled using custom CSS for a visually appealing UI and uses Streamli
 - **Interactive Interface**: Simple and user-friendly design powered by Streamlit.
 - **Custom Styling**: Attractive UI with animations and hover effects.
 - **Error Handling**: Displays proper error messages for invalid input or connection issues.
-
+- **sr.Recognizer**: Initializes the speech recognizer.
+-**Microphone Input**: Listens to the user and converts speech to text using Google's Speech Recognition API.
 ---
 
 ## **Installation Guide**
