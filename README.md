@@ -25,7 +25,7 @@ The app is styled using custom CSS for a visually appealing UI and uses Streamli
 - **Custom Styling**: Attractive UI with animations and hover effects.
 - **Error Handling**: Displays proper error messages for invalid input or connection issues.
 - **sr.Recognizer**: Initializes the speech recognizer.
--**Microphone Input**: Listens to the user and converts speech to text using Google's Speech Recognition API.
+- **Microphone Input**: Listens to the user and converts speech to text using Google's Speech Recognition API.
 ---
 
 ## **Installation Guide**
